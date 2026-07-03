@@ -19,7 +19,7 @@
   body{margin:0;background:var(--night);color:var(--ink);
     font-family:"EB Garamond",Georgia,serif;font-size:18px;line-height:1.62;overflow-x:hidden}
   #bg-fixed{position:fixed;inset:0;z-index:-3;background:radial-gradient(1200px 700px at 50% -10%,#16324c 0%,var(--night) 62%)}
-  #bg-texture{position:fixed;inset:0;z-index:-4;background-repeat:repeat;background-size:520px;opacity:.06;mix-blend-mode:overlay;pointer-events:none}
+  #bg-texture{position:fixed;inset:0;z-index:-4;background-repeat:repeat;background-size:180px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.04;mix-blend-mode:overlay;pointer-events:none}
   body::before,body::after{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none;opacity:.5}
   body::before{background:radial-gradient(600px 400px at 20% 15%,rgba(67,179,167,.10),transparent 60%),radial-gradient(700px 500px at 85% 30%,rgba(201,162,39,.08),transparent 60%);animation:drift1 24s ease-in-out infinite alternate}
   body::after{background:radial-gradient(500px 500px at 70% 80%,rgba(67,179,167,.07),transparent 60%),radial-gradient(600px 400px at 15% 85%,rgba(45,90,120,.14),transparent 60%);animation:drift2 30s ease-in-out infinite alternate}
@@ -62,6 +62,7 @@
   .stanza p{margin:0 0 1em;color:var(--marble);font-size:18.5px}
   .stanza p:first-of-type::first-letter{font-family:"Cinzel";font-weight:700;font-size:3.2em;line-height:.8;float:left;color:var(--bronze);margin:.05em .12em 0 0}
   .stanza .rule{height:1px;background:var(--line);margin:6px 0 14px}
+  .stanza img.moment{display:block;width:calc(100% + 68px);margin:2px -34px 18px;max-height:420px;object-fit:cover;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 
   /* HEROES */
   .heroes{display:grid;gap:22px;grid-template-columns:1fr;margin-top:14px}
@@ -135,6 +136,16 @@
   .lightbox .lclose{position:absolute;top:20px;right:26px;color:var(--marble);font-family:"Cinzel";font-size:22px;cursor:pointer;border:1px solid var(--line);border-radius:4px;padding:2px 13px}
   .lightbox .lclose:hover{border-color:var(--bronze);color:var(--gold)}
 
+  /* RUMORS */
+  .rumorgrid{columns:2;column-gap:20px;max-width:900px;margin:14px auto 0}
+  @media(max-width:640px){.rumorgrid{columns:1}}
+  .rumor{break-inside:avoid;background:linear-gradient(180deg,#1a2a1f,#16241c);border:1px solid rgba(201,162,39,.22);border-radius:4px;padding:16px 18px;margin-bottom:18px;box-shadow:0 8px 22px rgba(0,0,0,.34)}
+  .rumor .about{font-family:"Cinzel";font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);display:inline-block;border:1px solid var(--bronze-dim);border-radius:20px;padding:2px 10px;margin-bottom:8px}
+  .rumor p{margin:0;color:var(--marble);font-style:italic;font-size:16.5px}
+  .rumor p::before{content:"\201C";color:var(--bronze)}
+  .rumor p::after{content:"\201D";color:var(--bronze)}
+  .whisper-note{text-align:center;color:var(--dim);font-style:italic;max-width:620px;margin:6px auto 20px}
+
   footer{border-top:1px solid var(--line);text-align:center;padding:28px 20px;color:var(--dim);font-size:13px}
   footer .meander{max-width:200px;margin:0 auto 12px}
 </style>
@@ -161,7 +172,7 @@ const CAMPAIGN = {
   meta: {
     title: "Odyssey of the Dragonlords",
     subtitle: "The Saga of the Heroes of the Heartlands, as sung by Kyrah",
-    banner:  "banner.jpg",   // wide image atop the Chronicle. Upload one named banner.jpg, or set "" to hide.
+    banner:  "banner.png",   // wide image atop the Chronicle. Upload one named banner.jpg, or set "" to hide.
     texture: "",             // faint tiling texture behind everything, e.g. "parchment.png". "" = none.
   },
 
@@ -196,9 +207,9 @@ const CAMPAIGN = {
 
   /* ---- The Chronicle: Kyrah's epic. Newest entry FIRST. ------------------- */
   chronicle: [
-    { title: "The First Song", subtitle: "The Boar of the Heartlands",
+    { title: "The First Song", subtitle: "The Boar of the Heartlands", img: "cyrus_boar.png",
       body: "The Twin Titans, brooding in their storm-wracked tower, loosed a corrupted beast upon the Heartlands — a great boar, sent to bleed the land and break the faith of mortals. And four came forward when braver names had failed, gathered to a black-timbered inn by a poet with laurel in her hair.\n\nInto the cold and the fog they went, north into the ruined hills, and found the beast at its grim feast in the mouth of a reeking cave. Spear and spell and fury they answered it with, until the monster that no hunter had felled lay broken at their feet.\n\nAnd when the moment came to give the great kill its due, these four did not bend the knee to the Lord of Storms as his Order demanded. They raised the pyre to another — and something in the wind seemed pleased. So their names begin to travel ahead of them now, east and south, toward the Temple of the Oracle, where the naiad Versi waits to speak of what is to come." },
-    { title: "Invocation to the Muse", subtitle: "The Bard Takes Up the Tale",
+    { title: "Invocation to the Muse", subtitle: "The Bard Takes Up the Tale", img: "group_pic_1.png",
       body: "Sing, Memory — of saviours, of heroes, of champions. Sing of the Odyssey of the Dragonlords, and tell their tale once again.\n\nOf Baruk, who would not believe the last dragon dead. Of Raxus, calf of the slaughtered steppes and son of the Battle-God. Of Cyrus, keeper of the dead, who would not let go. Of Phoebe, moonlit and moth-crowned, who carries the old songs still.\n\nO Muse of memories long past — sing of Thylea, of her hour of crisis and her hour of salvation. Sing, and tell this tale once more in our time." },
   ],
 
@@ -214,7 +225,7 @@ const CAMPAIGN = {
       text:"A dark-haired poet in service to the Oracle, laurel in her hair, who summoned the heroes to the Sour Vintage. Sharp-tongued, quick to wonder, and eager to make their deeds into an epic. There is more to her than she lets on." },
     { cat:"People", name:"Versi, the Oracle", img:"",
       text:"A naiad seer of ancient power who brokered the Oath of Peace long ago, and who has now foreseen the Doom of Thylea — and the heroes who might avert it." },
-    { cat:"Places", name:"The Sour Vintage", img:"",
+    { cat:"Places", name:"The Sour Vintage", img:"raxus_bar.png",
       text:"A country inn at a crossroads east of Estoria, black-timbered and warm, where four strangers became a company." },
     { cat:"Places", name:"The Temple of the Oracle", img:"",
       text:"Home of the naiad Versi, hidden deep in a cleft of the earth where the ground itself breathes steam." },
@@ -224,8 +235,8 @@ const CAMPAIGN = {
 
   /* ---- Journey. Any stop may include a thumbnail: add  img: "file.jpg". ---- */
   journey: [
-    { name:"The Sour Vintage", status:"past", img:"", text:"Where a poet gathered four strangers and named them heroes." },
-    { name:"The Boar's Cave", status:"past", img:"", text:"In the ravaged hills, the corrupted beast was slain and given to the gods." },
+    { name:"The Sour Vintage", status:"past", img:"group_pic2.png", text:"Where a poet gathered four strangers and named them heroes." },
+    { name:"The Boar's Cave", status:"past", img:"baruk_boar.png", text:"In the ravaged hills, the corrupted beast was slain and given to the gods." },
     { name:"The Road East", status:"current", img:"", text:"Bound for the Temple of the Oracle, and whatever fate she has seen." },
     { name:"The Temple of the Oracle", status:"ahead", img:"", text:"The road ahead is yet unwritten." },
     { name:"Estoria", status:"ahead", img:"", text:"The road ahead is yet unwritten." },
@@ -285,7 +296,7 @@ const phead=(e,t,s)=>`<div class="phead"><div class="eyebrow">${esc(e)}</div><h1
 const R={
  chronicle(){
    const b=CAMPAIGN.meta.banner?`<div class="banner"><img src="${att(CAMPAIGN.meta.banner)}" alt="" onerror="this.closest('.banner').remove()"></div>`:"";
-   const items=CAMPAIGN.chronicle.map(e=>`<article class="stanza"><div class="st-eyebrow">${esc(e.subtitle||"")}</div><h2>${esc(e.title)}</h2><div class="rule"></div>${paras(e.body)}</article>`).join("");
+   const items=CAMPAIGN.chronicle.map(e=>`<article class="stanza"><div class="st-eyebrow">${esc(e.subtitle||"")}</div><h2>${esc(e.title)}</h2><div class="rule"></div>${e.img?`<img class="moment" src="${att(e.img)}" alt="" onerror="this.remove()">`:""}${paras(e.body)}</article>`).join("");
    return b+phead("As sung by Kyrah","The Chronicle","The saga of the Heroes of the Heartlands")+items;
  },
  heroes(){
