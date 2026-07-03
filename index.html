@@ -118,6 +118,20 @@
   .stop.ahead p{font-style:italic;color:var(--dim)}
   .stop img.thumb{display:block;width:100%;max-width:280px;height:120px;object-fit:cover;border-radius:4px;border:1px solid var(--line);margin-top:8px}
 
+  /* PANTHEON */
+  .pchart{display:block;max-width:100%;margin:8px auto 24px;border:1px solid var(--line);border-radius:5px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+  .godgrid,.titangrid{display:grid;gap:16px;grid-template-columns:1fr;max-width:840px;margin:0 auto}
+  @media(min-width:720px){.godgrid,.titangrid{grid-template-columns:1fr 1fr}}
+  .god{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:4px;padding:16px 20px}
+  .god .gname{font-family:"Cinzel";color:var(--gold);font-size:18px}
+  .god .gdomain{font-family:"Cinzel";color:var(--teal);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:2px 0 8px}
+  .god p{margin:0;color:var(--ink);font-size:15.5px}
+  .titan{background:linear-gradient(180deg,#241a24,#1b131b);border:1px solid rgba(176,68,47,.32);border-radius:4px;padding:16px 20px}
+  .titan h4{font-family:"Cinzel";color:#d98b6a;margin:0 0 6px;font-size:16px}
+  .titan p{margin:0;color:var(--ink);font-size:15.5px}
+  .forgotten{max-width:760px;margin:6px auto 0}
+  .forgotten p{color:var(--dim);font-style:italic;text-align:center;font-size:16.5px;line-height:1.7}
+
   /* MAPS */
   .mapgrid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));max-width:980px;margin:18px auto 0}
   .mapcard{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:5px;overflow:hidden;cursor:pointer;transition:.15s}
@@ -257,6 +271,25 @@ const CAMPAIGN = {
     { about:"Phoebe", text:"She's cursed. Everyone who gets close to her dies." },
     { about:"Phoebe", text:"She is the lost daughter of a murdered queen." },
   ],
+
+  /* ---- Pantheon. The Five in full; the Titans named as the threat; the old
+         gods kept vague. Crop the chart to just The Five and upload it as the
+         image below (or set "" to hide the image). Spoiler-safe by design. --- */
+  pantheon: {
+    fiveImage: "five-gods.jpg",
+    five: [
+      { name:"Mytros", domain:"Dawn", worship:"Patron god of the great city that bears the name. God of hope, magic, protection, medicine, and the harvest — worshipped by magic-users, mothers, healers, and heads of family, and invoked to avert evil." },
+      { name:"Volkan", domain:"Craft", worship:"God of the forge, fire, and making. Worshipped by smiths, tanners, fletchers, millers, and artificers — anyone whose hands shape metal, wood, or stone." },
+      { name:"Vallus", domain:"Wisdom", worship:"Queen of Mytros and goddess of civilization, law, and learning — of strategy, commerce, and the arts. Worshipped by planners, generals, academics, and scholars." },
+      { name:"Kyrah", domain:"Swiftness", worship:"Goddess of music and the road — of performance, travel, trade, exploration, and heroic endeavor. Worshipped by bards, performers, traders, explorers, and wanderers of every kind." },
+      { name:"Pythor", domain:"Battle", worship:"Patron god of Estoria and god of war, fury, and valour — of courage, strength, and the hunt. Worshipped by soldiers, warriors, and all who live by the blade." },
+    ],
+    titans: [
+      { name:"Sydon, the Lord of Storms", text:"The elder Titan of sea and storm, whose rains and earthquakes once ruled Thylea unchallenged. For five centuries the Oath of Peace has shackled his wrath — but the Oath is failing, and the storms are rising again." },
+      { name:"Lutheria, the Mistress of Madness", text:"Sydon's sister-wife, Titan of death and dreams, of wine and revel and plague. Crueler and stranger than her brother, she schemes in dark places while he rages in the open sky." },
+    ],
+    forgotten: "Before the Five, before even the Dragonlords, older powers were revered across Thylea — Thylea herself, the green mother of the world; the Fates, who spin, measure, and cut the thread of every life; an old sun-god whose shrines still stand forgotten on lonely roads; and darker things best left unnamed. Their temples are empty now, their rites kept only by a scattered few who will not let the old ways die.",
+  },
 };
 
 /* ======================= FIXED ENGINE — do not edit ======================= */
@@ -289,7 +322,7 @@ const att=s=>esc(s).replace(/"/g,'&quot;');
 const paras=s=>s.split("\n\n").map(p=>`<p>${esc(p)}</p>`).join("");
 
 const VIEWS=[["chronicle","The Chronicle"],["heroes","The Heroes"],["fame","Fame"],
-  ["codex","Codex"],["journey","The Journey"],["maps","Maps"],["rumors","Whispers"]];
+  ["codex","Codex"],["pantheon","Pantheon"],["journey","The Journey"],["maps","Maps"],["rumors","Whispers"]];
 
 const phead=(e,t,s)=>`<div class="phead"><div class="eyebrow">${esc(e)}</div><h1>${esc(t)}</h1>${s?`<div class="sub">${esc(s)}</div>`:""}<div class="meander"></div></div>`;
 
@@ -321,6 +354,17 @@ const R={
        const im=e.img?`<img class="scene" src="${att(e.img)}" alt="" onerror="this.remove()">`:"";
        return `<div class="entry">${im}<h4>${esc(e.name)}</h4><p>${esc(e.text)}</p></div>`;}).join("")+`</div>`;}
    return phead("What We Know","Codex of Thylea","Knowledge earned upon the road")+out;
+ },
+ pantheon(){
+   const p=CAMPAIGN.pantheon||{};
+   const img=p.fiveImage?`<img class="pchart" src="${att(p.fiveImage)}" alt="The Five Gods" onerror="this.remove()">`:"";
+   const five=(p.five||[]).map(g=>`<div class="god"><div class="gname">${esc(g.name)}</div><div class="gdomain">${esc(g.domain)}</div><p>${esc(g.worship)}</p></div>`).join("");
+   const titans=(p.titans||[]).map(t=>`<div class="titan"><h4>${esc(t.name)}</h4><p>${esc(t.text)}</p></div>`).join("");
+   const forg=p.forgotten?`<div class="codexcat" style="color:#8a7327">The Forgotten Gods</div><div class="forgotten"><p>${esc(p.forgotten)}</p></div>`:"";
+   return phead("The Gods of Thylea","The Pantheon","Those the mortals of Thylea revere — and those they fear")
+     +`<div class="codexcat">The Five Gods</div>${img}<div class="godgrid">${five}</div>`
+     +(titans?`<div class="codexcat" style="color:#c98a6a">The Twin Titans</div><div class="titangrid">${titans}</div>`:"")
+     +forg;
  },
  journey(){
    const stops=CAMPAIGN.journey.map(s=>{
